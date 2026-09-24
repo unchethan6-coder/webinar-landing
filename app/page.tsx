@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+
+const officialLogoUrl = 'https://learn.fundedproptraders.com/content/orgs/org_ee416042-6f77-4d96-a45c-84fb012dfea4/logos/259957e1-1e6b-48e3-8add-b4f8c376a87e_logo.jpg'
 import {
   ArrowRight,
   BarChart3,
@@ -82,7 +84,7 @@ export default function Page() {
   return (
     <main className="site-shell">
       <header className="site-header">
-        <a className="brand" href="#top" aria-label="Funded Prop Traders home"><span>FPT</span><small>FUNDED PROP TRADERS</small></a>
+        <a className="brand" href="#top" aria-label="Funded Prop Traders home"><img src={officialLogoUrl} alt="Funded Prop Traders" onError={(event) => { event.currentTarget.hidden = true }} /><span>FPT</span><small>FUNDED PROP TRADERS</small></a>
         <nav className={menuOpen ? 'nav-links is-open' : 'nav-links'} aria-label="Main navigation">
           <button onClick={() => scrollTo('training')}>Training</button><button onClick={() => scrollTo('roadmap')}>Roadmap</button><button onClick={() => scrollTo('faq')}>FAQ</button>
           <button className="nav-cta" onClick={() => scrollTo('booking')}>Book a Free Call <ArrowRight aria-hidden="true" /></button>
@@ -126,7 +128,7 @@ export default function Page() {
 
       <section className="final-cta section-pad"><p className="eyebrow gold">START WITH CLARITY</p><h2>Ready to Build Your<br /><em>Funded Trading Roadmap?</em></h2><p>Get clarity on your next milestone and the process required to pursue it with discipline.</p><button className="button button-gold" onClick={() => scrollTo('booking')}>Book Your Free Strategy Call <ArrowRight data-icon="inline-end" /></button></section>
 
-      <footer className="footer"><div className="footer-top"><a className="brand" href="#top"><span>FPT</span><small>FUNDED PROP TRADERS</small></a><p>Education for traders who value process, discipline, and long-term progress.</p><div className="footer-links"><a href="#training">Training</a><a href="#roadmap">Roadmap</a><a href="#faq">FAQ</a><a href="#booking">Book a call</a></div></div><div className="footer-bottom"><span>© 2026 Funded Prop Traders</span><div><a href="#top">Privacy Policy</a><a href="#top">Terms of Service</a><a href="#top">Risk Disclosure</a><a href="#top">Earnings Disclaimer</a><a href="#top">Refund Policy</a></div></div><p className="legal">Trading futures, forex and other leveraged products involves substantial risk and is not suitable for every investor. Educational content is not financial advice. Simulated or past performance is not indicative of future results. No representation is made that any account will achieve profits or reach $1M in funding. Funded Prop Traders is not affiliated with or endorsed by Meta Platforms, Inc.</p></footer>
+      <footer className="footer"><div className="footer-top"><a className="brand" href="#top"><img src={officialLogoUrl} alt="Funded Prop Traders" onError={(event) => { event.currentTarget.hidden = true }} /><span>FPT</span><small>FUNDED PROP TRADERS</small></a><p>Education for traders who value process, discipline, and long-term progress.</p><div className="footer-links"><a href="#training">Training</a><a href="#roadmap">Roadmap</a><a href="#faq">FAQ</a><a href="#booking">Book a call</a></div></div><div className="footer-bottom"><span>© 2026 Funded Prop Traders</span><div><a href="#top">Privacy Policy</a><a href="#top">Terms of Service</a><a href="#top">Risk Disclosure</a><a href="#top">Earnings Disclaimer</a><a href="#top">Refund Policy</a></div></div><p className="legal">Trading futures, forex and other leveraged products involves substantial risk and is not suitable for every investor. Educational content is not financial advice. Simulated or past performance is not indicative of future results. No representation is made that any account will achieve profits or reach $1M in funding. Funded Prop Traders is not affiliated with or endorsed by Meta Platforms, Inc.</p></footer>
     </main>
   )
 }
