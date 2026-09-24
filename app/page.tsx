@@ -5,22 +5,12 @@ import { useEffect, useState } from 'react'
 const officialLogoUrl = 'https://learn.fundedproptraders.com/content/orgs/org_ee416042-6f77-4d96-a45c-84fb012dfea4/logos/259957e1-1e6b-48e3-8add-b4f8c376a87e_logo.jpg'
 import {
   ArrowRight,
-  BarChart3,
   CalendarDays,
   Check,
   ChevronDown,
   Clock3,
-  Compass,
-  FileText,
-  Headphones,
   Menu,
-  Play,
-  ShieldCheck,
-  Sparkles,
-  Target,
-  Users,
   X,
-  Zap,
 } from 'lucide-react'
 
 const learnItems = [
@@ -39,14 +29,6 @@ const milestones = [
 ]
 
 const audience = ['Traders wanting a structured plan', 'Traders trying to pass evaluations', 'Funded traders looking to scale', 'Traders who want guidance and accountability']
-const features = [
-  [BarChart3, 'Trading education', 'Clear lessons focused on process over prediction.'],
-  [Target, 'Scaling framework', 'A practical way to think about the next account milestone.'],
-  [ShieldCheck, 'Prop firm strategy', 'Navigate rules and evaluations with more intention.'],
-  [Users, 'Community access', 'Learn alongside traders pursuing disciplined progress.'],
-  [Headphones, 'Support', 'Get perspective when you need to pressure-test your plan.'],
-  [FileText, 'Training resources', 'Templates and walkthroughs you can return to as you grow.'],
-]
 const faqs = [
   ['Do I need trading experience?', 'No. The training is designed to meet you where you are, whether you are learning the basics or working toward your next funded milestone.'],
   ['How long is the strategy call?', 'The complimentary strategy call is 30 minutes.'],
@@ -92,22 +74,6 @@ export default function Page() {
         <button className="menu-toggle" aria-label={menuOpen ? 'Close menu' : 'Open menu'} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
       </header>
 
-      <section id="top" className="hero section-pad">
-        <div className="hero-copy">
-          <p className="eyebrow"><span /> FREE WEBINAR <i>•</i> FUNDED TRADING ROADMAP</p>
-          <h1>The Roadmap to <em>$1M</em> in Funded Capital</h1>
-          <p className="lede">Learn the step-by-step framework for building trading consistency, navigating prop firm evaluations, and scaling funded accounts with discipline.</p>
-          <div className="button-row"><button className="button button-dark" onClick={() => scrollTo('training')}>Watch the Free Training <Play data-icon="inline-end" /></button><button className="button button-light" onClick={() => scrollTo('booking')}>Build My Roadmap <ArrowRight data-icon="inline-end" /></button></div>
-          <p className="trust"><Check /> Education-first <span>•</span> Practical framework <span>•</span> No income guarantees</p>
-        </div>
-        <div className="roadmap-visual" aria-label="Roadmap stages from skill to one million dollars">
-          <div className="visual-top"><span>THE PATH TO SCALE</span><span>01 — 05</span></div>
-          <div className="visual-line" />
-          {milestones.map(([title], i) => <div className="visual-node" key={title} style={{ '--i': i } as React.CSSProperties}><span className="node-dot">{i === 0 ? <Compass /> : i + 1}</span><strong>{title}</strong><small>{i === 0 ? 'Foundation' : 'Milestone'}</small></div>)}
-          <div className="visual-footer"><span>PROCESS OVER PROMISES</span><Sparkles /></div>
-        </div>
-      </section>
-
       <section id="training" className="video-section section-pad"><div className="section-intro"><p className="eyebrow">01 / FREE TRAINING</p><h2>Start With the Free Training</h2><p>A practical walkthrough of the skill, risk and scaling milestones behind the roadmap.</p></div><div className="video-wrap"><iframe src="https://drive.google.com/file/d/1czdexW7xgThH8auvX1oSwXud0InMuvQg/preview" title="The Roadmap to $1M in Funded Capital free training" allow="autoplay" allowFullScreen /></div><button className="text-cta" onClick={() => scrollTo('booking')}>Book Your Strategy Call <ArrowRight /></button></section>
 
       <section className="soft-section section-pad"><div className="section-intro split-intro"><div><p className="eyebrow">02 / THE FRAMEWORK</p><h2>What You&apos;ll Learn</h2></div><p>Clarity comes from knowing what to work on next. This training turns a distant target into a sequence of practical priorities.</p></div><div className="learn-grid">{learnItems.map(([num, title, copy]) => <article className="learn-card" key={num}><span className="card-number">{num}</span><h3>{title}</h3><p>{copy}</p><ArrowRight /></article>)}</div></section>
@@ -116,11 +82,7 @@ export default function Page() {
 
       <section className="section-pad audience-section"><div className="audience-copy"><p className="eyebrow">04 / WHO THIS IS FOR</p><h2>Structure creates<br /><em>better decisions.</em></h2><p>Whether you are taking your first evaluation or ready to make your funded journey more intentional, the roadmap starts with your current stage.</p><p className="not-for"><strong>This may not be for you</strong><br />If you are looking for guaranteed profits, shortcuts, or overnight results.</p></div><div className="audience-list">{audience.map((item, i) => <div key={item}><span>0{i + 1}</span><p>{item}</p><ArrowRight /></div>)}</div></section>
 
-      <section className="soft-section section-pad"><div className="section-intro"><p className="eyebrow">05 / YOUR ADVANTAGE</p><h2>What You Get</h2></div><div className="feature-grid">{features.map(([Icon, title, copy]) => <article className="feature-card" key={title as string}><Icon /><h3>{title as string}</h3><p>{copy as string}</p></article>)}</div></section>
-
       <section className="proof-section section-pad"><div className="section-intro split-intro"><div><p className="eyebrow">06 / SOCIAL PROOF</p><h2>Real Traders.<br /><em>Real Progress.</em></h2></div><div><p>Explore selected community wins, funded-account milestones, and case studies shared by members.</p><a className="underlined" href="https://drive.google.com/drive/folders/1A5Zc1Cz71Vl0CaPwh7MIeJsMgOb9NIlj" target="_blank" rel="noreferrer">View verified result library <ArrowRight /></a></div></div><div className="proof-grid">{['Community result', 'Funded milestone', 'Process snapshot', 'Community result', 'Evaluation progress', 'Member case study'].map((label, i) => <div className="proof-card" key={`${label}-${i}`}><div className="proof-screenshot"><span className="proof-window"><i /><i /><i /></span><div className="proof-bars"><b style={{ height: `${35 + i * 7}%` }} /><b style={{ height: `${58 - i * 3}%` }} /><b style={{ height: `${45 + i * 4}%` }} /><b style={{ height: `${70 - i * 5}%` }} /></div><span className="proof-label">{label}</span></div><p>Shared by a member of the FPT community</p></div>)}</div><p className="disclosure">Individual results vary. Examples are not typical and do not guarantee future performance.</p></section>
-
-      <section className="dark-call section-pad"><div><p className="eyebrow gold">07 / THE NEXT STEP</p><h2>Build Your Personal<br /><em>$1M Roadmap</em></h2><p>During this complimentary strategy call, we&apos;ll review your current experience, identify the biggest gap in your trading process, and map practical next steps for your funded-account journey.</p></div><div className="call-details"><p><Check /> Current-stage review</p><p><Check /> Evaluation and risk-plan audit</p><p><Check /> Personal next-step roadmap</p><button className="button button-gold" onClick={() => scrollTo('booking')}>Schedule Your 1-to-1 Call <ArrowRight data-icon="inline-end" /></button></div></section>
 
       <section id="booking" className="booking-section section-pad"><div className="section-intro"><p className="eyebrow">08 / RESERVE YOUR SPOT</p><h2>Book Your Strategy Call</h2><p>Choose a time that works for you. This is a demo booking interface—no calendar invite is sent without a scheduling integration.</p></div><div className="booking-card">{confirmed ? <div className="confirmation"><span className="success-icon"><Check /></span><p className="eyebrow">BOOKING REQUEST READY</p><h3>You&apos;re on the roadmap.</h3><p>Your complimentary strategy call is set for {selectedDate} September at {selectedTime}. A team member will confirm the details with you.</p><a className="button button-dark" href={challengeUrl}>Continue to the $1M Funded Challenge</a><p>Redirecting you to the program details…</p><button className="text-cta" onClick={() => setConfirmed(false)}>Edit booking</button></div> : <><div className="steps">{['Date', 'Time', 'Contact Details', 'Confirm Booking'].map((name, i) => <div className={step === i + 1 ? 'step active' : step > i + 1 ? 'step done' : 'step'} key={name}><span>{step > i + 1 ? <Check /> : i + 1}</span>{name}</div>)}</div>{step === 1 && <div className="booking-pane"><div className="calendar-head"><div><p className="eyebrow">SELECT A DATE</p><h3>September 2026</h3></div><CalendarDays /></div><div className="weekdays">{['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((d, i) => <span key={`${d}-${i}`}>{d}</span>)}</div><div className="date-grid">{['31', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '1', '2', '3', '4'].map((d, i) => <button key={`${d}-${i}`} disabled={i === 0 || i > 30} className={selectedDate === d && i < 31 ? 'date selected' : 'date'} onClick={() => setSelectedDate(d)}>{d}</button>)}</div><button className="button button-dark full" onClick={() => setStep(2)}>Continue to times <ArrowRight /></button></div>}{step === 2 && <div className="booking-pane"><p className="eyebrow">SELECT A TIME</p><h3>Available times for September {selectedDate}</h3><div className="time-grid">{['9:00 AM', '10:30 AM', '12:00 PM', '2:00 PM', '3:30 PM', '5:00 PM'].map(t => <button className={selectedTime === t ? 'time selected' : 'time'} key={t} onClick={() => setSelectedTime(t)}><Clock3 />{t}</button>)}</div><div className="booking-actions"><button className="button button-light" onClick={() => setStep(1)}>Back</button><button className="button button-dark" onClick={() => setStep(3)}>Continue <ArrowRight /></button></div></div>}{step === 3 && <div className="booking-pane"><p className="eyebrow">YOUR DETAILS</p><h3>Where should we send confirmation?</h3><label>Full name<input type="text" placeholder="Your name" /></label><label>Email address<input type="email" placeholder="you@example.com" /></label><label>Phone number <span>(optional)</span><input type="tel" placeholder="+1 (555) 000-0000" /></label><label className="consent"><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} /> I agree to be contacted about my strategy call.</label><div className="booking-actions"><button className="button button-light" onClick={() => setStep(2)}>Back</button><button className="button button-dark" disabled={!consent} onClick={() => setStep(4)}>Review details <ArrowRight /></button></div></div>}{step === 4 && <div className="booking-pane review"><p className="eyebrow">CONFIRM BOOKING</p><h3>Review your strategy call</h3><div className="review-row"><span>Date</span><strong>September {selectedDate}, 2026</strong></div><div className="review-row"><span>Time</span><strong>{selectedTime} (ET)</strong></div><div className="review-row"><span>Format</span><strong>Complimentary 30-minute call</strong></div><div className="booking-actions"><button className="button button-light" onClick={() => setStep(3)}>Back</button><button className="button button-gold" onClick={() => setConfirmed(true)}>Confirm Free Strategy Call <Check /></button></div></div>}</>}</div></section>
 
