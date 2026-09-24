@@ -65,7 +65,13 @@ export default function Page() {
 
       <section id="training" className="video-section section-pad"><div className="section-intro"><p className="eyebrow">01 / FREE TRAINING</p><h2>Start With the Free Training</h2><p>A practical walkthrough of the skill, risk and scaling milestones behind the roadmap.</p></div><div className="video-wrap"><video autoPlay muted playsInline controls preload="metadata" poster="/fpt-vsl-poster.webp" aria-label="The Roadmap to $1M in Funded Capital free training"><source src="/fpt-vsl.mp4" type="video/mp4" />Your browser does not support HTML video.</video></div><button className="text-cta" onClick={() => scrollTo('booking')}>Book Your Strategy Call <ArrowRight /></button></section>
 
-      <section id="booking" className="booking-section section-pad"><div className="section-intro"><p className="eyebrow">02 / RESERVE YOUR SPOT</p><h2>Book Your Strategy Call</h2><p>Complete the short form below and our team will help you plan your next funded-trading milestone.</p></div><div className="typeform-card"><div data-tf-widget="kteHRTTw" data-tf-inline-on-mobile data-tf-medium="snippet" /></div><Script id="typeform-embed" src="https://embed.typeform.com/next/embed.js" strategy="afterInteractive" /></section>
+      <section id="booking" className="booking-section section-pad"><div className="section-intro"><p className="eyebrow">02 / RESERVE YOUR SPOT</p><h2>Book Your Strategy Call</h2><p>Complete the short form below and our team will help you plan your next funded-trading milestone.</p></div><div className="typeform-card"><div data-tf-widget="kteHRTTw" data-tf-on-submit="fptLeadSubmit" data-tf-inline-on-mobile data-tf-medium="snippet" /></div><Script id="fpt-lead-submit" strategy="beforeInteractive">{`function fptLeadSubmit(event) {
+  if (window.fbq) {
+    window.fbq('track', 'Lead', {
+      content_name: 'Strategy Call Typeform'
+    }, { eventID: event.responseId });
+  }
+}`}</Script><Script id="typeform-embed" src="https://embed.typeform.com/next/embed.js" strategy="afterInteractive" /></section>
 
       <section className="soft-section section-pad"><div className="section-intro split-intro"><div><p className="eyebrow">03 / THE FRAMEWORK</p><h2>What You&apos;ll Learn</h2></div><p>Clarity comes from knowing what to work on next. This training turns a distant target into a sequence of practical priorities.</p></div><div className="learn-grid">{learnItems.map(([num, title, copy]) => <article className="learn-card" key={num}><span className="card-number">{num}</span><h3>{title}</h3><p>{copy}</p><ArrowRight /></article>)}</div></section>
 
