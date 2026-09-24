@@ -1,14 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const officialLogoUrl = 'https://learn.fundedproptraders.com/content/orgs/org_ee416042-6f77-4d96-a45c-84fb012dfea4/logos/259957e1-1e6b-48e3-8add-b4f8c376a87e_logo.jpg'
 import {
   ArrowRight,
-  CalendarDays,
-  Check,
   ChevronDown,
-  Clock3,
   Menu,
   X,
 } from 'lucide-react'
@@ -49,23 +46,6 @@ const faqs = [
 export default function Page() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [faqOpen, setFaqOpen] = useState<number | null>(0)
-  const [step, setStep] = useState(1)
-  const [selectedDate, setSelectedDate] = useState('18')
-  const [selectedTime, setSelectedTime] = useState('10:30 AM')
-  const [confirmed, setConfirmed] = useState(false)
-  const [consent, setConsent] = useState(false)
-  const challengeUrl = 'https://learn.fundedproptraders.com/store/offers/6c65a447-96b3-4bd5-be94-f11dbb3491a2'
-
-  useEffect(() => {
-    if (!confirmed) return
-
-    const redirectTimer = window.setTimeout(() => {
-      window.location.href = challengeUrl
-    }, 2000)
-
-    return () => window.clearTimeout(redirectTimer)
-  }, [confirmed])
-
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
     setMenuOpen(false)
@@ -84,7 +64,7 @@ export default function Page() {
 
       <section id="training" className="video-section section-pad"><div className="section-intro"><p className="eyebrow">01 / FREE TRAINING</p><h2>Start With the Free Training</h2><p>A practical walkthrough of the skill, risk and scaling milestones behind the roadmap.</p></div><div className="video-wrap"><video autoPlay muted playsInline controls preload="metadata" poster="/fpt-vsl-poster.webp" aria-label="The Roadmap to $1M in Funded Capital free training"><source src="/fpt-vsl.mp4" type="video/mp4" />Your browser does not support HTML video.</video></div><button className="text-cta" onClick={() => scrollTo('booking')}>Book Your Strategy Call <ArrowRight /></button></section>
 
-      <section id="booking" className="booking-section section-pad"><div className="section-intro"><p className="eyebrow">02 / RESERVE YOUR SPOT</p><h2>Book Your Strategy Call</h2><p>Choose a time that works for you. This is a demo booking interface—no calendar invite is sent without a scheduling integration.</p></div><div className="booking-card">{confirmed ? <div className="confirmation"><span className="success-icon"><Check /></span><p className="eyebrow">BOOKING REQUEST READY</p><h3>You&apos;re on the roadmap.</h3><p>Your complimentary strategy call is set for {selectedDate} September at {selectedTime}. A team member will confirm the details with you.</p><a className="button button-dark" href={challengeUrl}>Continue to the $1M Funded Challenge</a><p>Redirecting you to the program details…</p><button className="text-cta" onClick={() => setConfirmed(false)}>Edit booking</button></div> : <><div className="steps">{['Date', 'Time', 'Contact Details', 'Confirm Booking'].map((name, i) => <div className={step === i + 1 ? 'step active' : step > i + 1 ? 'step done' : 'step'} key={name}><span>{step > i + 1 ? <Check /> : i + 1}</span>{name}</div>)}</div>{step === 1 && <div className="booking-pane"><div className="calendar-head"><div><p className="eyebrow">SELECT A DATE</p><h3>September 2026</h3></div><CalendarDays /></div><div className="weekdays">{['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((d, i) => <span key={`${d}-${i}`}>{d}</span>)}</div><div className="date-grid">{['31', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '1', '2', '3', '4'].map((d, i) => <button key={`${d}-${i}`} disabled={i === 0 || i > 30} className={selectedDate === d && i < 31 ? 'date selected' : 'date'} onClick={() => setSelectedDate(d)}>{d}</button>)}</div><button className="button button-dark full" onClick={() => setStep(2)}>Continue to times <ArrowRight /></button></div>}{step === 2 && <div className="booking-pane"><p className="eyebrow">SELECT A TIME</p><h3>Available times for September {selectedDate}</h3><div className="time-grid">{['9:00 AM', '10:30 AM', '12:00 PM', '2:00 PM', '3:30 PM', '5:00 PM'].map(t => <button className={selectedTime === t ? 'time selected' : 'time'} key={t} onClick={() => setSelectedTime(t)}><Clock3 />{t}</button>)}</div><div className="booking-actions"><button className="button button-light" onClick={() => setStep(1)}>Back</button><button className="button button-dark" onClick={() => setStep(3)}>Continue <ArrowRight /></button></div></div>}{step === 3 && <div className="booking-pane"><p className="eyebrow">YOUR DETAILS</p><h3>Where should we send confirmation?</h3><label>Full name<input type="text" placeholder="Your name" /></label><label>Email address<input type="email" placeholder="you@example.com" /></label><label>Phone number <span>(optional)</span><input type="tel" placeholder="+1 (555) 000-0000" /></label><label className="consent"><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} /> I agree to be contacted about my strategy call.</label><div className="booking-actions"><button className="button button-light" onClick={() => setStep(2)}>Back</button><button className="button button-dark" disabled={!consent} onClick={() => setStep(4)}>Review details <ArrowRight /></button></div></div>}{step === 4 && <div className="booking-pane review"><p className="eyebrow">CONFIRM BOOKING</p><h3>Review your strategy call</h3><div className="review-row"><span>Date</span><strong>September {selectedDate}, 2026</strong></div><div className="review-row"><span>Time</span><strong>{selectedTime} (ET)</strong></div><div className="review-row"><span>Format</span><strong>Complimentary 30-minute call</strong></div><div className="booking-actions"><button className="button button-light" onClick={() => setStep(3)}>Back</button><button className="button button-gold" onClick={() => setConfirmed(true)}>Confirm Free Strategy Call <Check /></button></div></div>}</>}</div></section>
+      <section id="booking" className="booking-section section-pad"><div className="section-intro"><p className="eyebrow">02 / RESERVE YOUR SPOT</p><h2>Book Your Strategy Call</h2><p>Complete the short form below and our team will help you plan your next funded-trading milestone.</p></div><div className="typeform-card"><iframe src="https://form.typeform.com/to/kteHRTTw?typeform-embed=embed-widget" title="Book your strategy call" loading="lazy" allow="camera; microphone; autoplay; encrypted-media;" /></div></section>
 
       <section className="soft-section section-pad"><div className="section-intro split-intro"><div><p className="eyebrow">03 / THE FRAMEWORK</p><h2>What You&apos;ll Learn</h2></div><p>Clarity comes from knowing what to work on next. This training turns a distant target into a sequence of practical priorities.</p></div><div className="learn-grid">{learnItems.map(([num, title, copy]) => <article className="learn-card" key={num}><span className="card-number">{num}</span><h3>{title}</h3><p>{copy}</p><ArrowRight /></article>)}</div></section>
 
