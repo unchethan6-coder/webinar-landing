@@ -1,6 +1,7 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
+import Image from 'next/image'
 import { ArrowDown, ArrowRight, Check, ShieldCheck } from 'lucide-react'
 import styles from './styles.module.css'
 
@@ -18,6 +19,16 @@ const chapters = [
   ['02', 'MILESTONES / CONSISTENCY / PROTECTION', 'Build', 'Progress through realistic funded milestones while protecting consistency across accounts.'],
   ['03', 'CAPITAL / EXPOSURE / REVIEW', 'Scale', 'Add capital deliberately, manage combined exposure and review performance before the next step.'],
 ]
+
+const proofGallery = [
+  { src: '/jason-payout-3320.jpeg', alt: 'Finotive Funding withdrawal certificate showing a $3,320.08 profit split', label: 'Withdrawal proof' },
+  { src: '/jason-payout-4118.jpeg', alt: 'Finotive Funding withdrawal certificate showing a $4,118.20 profit split', label: 'Withdrawal proof' },
+  { src: '/ftmo-reward.jpg', alt: 'FTMO reward certificate showing a $20,153.98 reward', label: 'Trader reward' },
+  { src: '/funded-trader-certificate.jpeg', alt: 'My Funded FX funded trader certificate for a $100,000 account', label: 'Funded account' },
+  { src: '/community-funded-account.jpeg', alt: 'Community message celebrating a passed prop firm challenge', label: 'Community milestone' },
+  { src: '/community-message.png', alt: 'Community testimonial thanking Dan and the team for their support', label: 'Community feedback' },
+  { src: '/sebastian-rewards.png', alt: 'FTMO reward dashboard showing two trader reward certificates', label: 'Trader rewards' },
+] as const
 
 function Logo() {
   return <div className={styles.logo}><img src={logoUrl} alt="Funded Prop Traders" /><span>Funded<br />Prop<br />Traders</span></div>
@@ -78,7 +89,7 @@ export default function LeadMagnetPage() {
     </section>
 
     <section className={styles.dan}>
-      <div className={styles.monogram}>D</div><div><p className={styles.eyebrow}>BUILT FROM EXPERIENCE</p><h2>Trade the plan.<br /><em>Not the pressure.</em></h2><p>Dan Cheung is a prop-firm trading educator who documents the realities of challenges, funded-account progress, setbacks, risk and discipline for a large trading audience.</p><strong>His public YouTube channel has over 100,000 subscribers — people who value the process behind the outcome.</strong></div>
+      <div className={styles.profile}><Image src="/dan-cheung-profile.jpg" alt="Dan Cheung speaking on a podcast" fill sizes="(max-width: 850px) 100vw, 42vw" /></div><div><p className={styles.eyebrow}>BUILT FROM EXPERIENCE</p><h2>Trade the plan.<br /><em>Not the pressure.</em></h2><p>Dan Cheung is a prop-firm trading educator who documents the realities of challenges, funded-account progress, setbacks, risk and discipline for a large trading audience.</p><strong>His public YouTube channel has over 100,000 subscribers — people who value the process behind the outcome.</strong></div>
     </section>
 
     <section className={styles.inside}>
@@ -86,7 +97,7 @@ export default function LeadMagnetPage() {
       <div className={styles.chapterGrid}>{chapters.map(([n,k,t,c])=><article key={n}><span>{n}</span><small>{k}</small><h3>{t}</h3><p>{c}</p></article>)}</div>
     </section>
 
-    <section className={styles.proof}><p className={styles.eyebrow}>COMMUNITY NOTES</p><h2>Built for traders who value <em>process over hype.</em></h2><div className={styles.quotes}><blockquote>“Thanks to Dan, I just passed my first 50K prop firm account today.”<cite>— Hein Aung</cite></blockquote><blockquote>“Pattern A has given me confidence in my trading. Journaling has helped improve my accountability.”<cite>— Fidencio</cite></blockquote><blockquote>“Just got my certificate after passing yesterday.”<cite>— Chloe</cite></blockquote></div><small>Individual results vary. Examples are not typical and do not guarantee future performance.</small></section>
+    <section className={styles.proof}><p className={styles.eyebrow}>COMMUNITY NOTES</p><h2>Built for traders who value <em>process over hype.</em></h2><div className={styles.quotes}><blockquote>“Thanks to Dan, I just passed my first 50K prop firm account today.”<cite>— Hein Aung</cite></blockquote><blockquote>“Pattern A has given me confidence in my trading. Journaling has helped improve my accountability.”<cite>— Fidencio</cite></blockquote><blockquote>“Just got my certificate after passing yesterday.”<cite>— Chloe</cite></blockquote></div><div className={styles.proofGallery}>{proofGallery.map(({ src, alt, label }) => <figure key={src}><div><Image src={src} alt={alt} fill sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw" /></div><figcaption>{label}</figcaption></figure>)}</div><small>Shared community examples are presented for educational context. Individual results vary and are not typical or guaranteed.</small></section>
 
     <section className={styles.audience}><div><p className={styles.eyebrow}>IS THIS FOR YOU?</p><h2>Start with the right kind of <em>ambition.</em></h2></div><ul>{['Preparing for a first prop-firm challenge','Already funded and planning the next milestone','Rebuilding after a breach or payout setback','Wanting a structured path toward larger funded capital'].map(x=><li key={x}><Check />{x}</li>)}</ul></section>
 
