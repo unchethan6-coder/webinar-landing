@@ -6,7 +6,7 @@
 @media(max-width:520px){.profile{aspect-ratio:4/5}.proofGallery{grid-template-columns:1fr}}
 
 /* Blueprint cover photo mock */
-.guide{overflow:hidden;background:#f1efe6}
+.guide{background:#f1efe6}
 .guideImg{object-fit:cover;object-position:center bottom;z-index:0;pointer-events:none}
 .guide>*:not(.guideImg){position:relative;z-index:1}
 .guide>strong{font-size:64px;line-height:1;margin:34px 0 12px}
