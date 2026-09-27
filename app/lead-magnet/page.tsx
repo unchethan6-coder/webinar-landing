@@ -7,6 +7,9 @@ import styles from './styles.module.css'
 
 const logoUrl = 'https://learn.fundedproptraders.com/content/orgs/org_ee416042-6f77-4d96-a45c-84fb012dfea4/logos/259957e1-1e6b-48e3-8add-b4f8c376a87e_logo.jpg'
 
+// Google Sheet lead capture (Apps Script web app)
+const leadSheetUrl = 'https://script.google.com/macros/s/AKfycbwavwpb40XozO72UEjTNgK5efULd_23k9--c8ks6ev05nh9Cm_zlLXydMZmdZ08D3L_/exec'
+
 const lessons = [
   ['01', 'Challenge selection and preparation', 'Choose a starting point and prepare around the rules that matter.'],
   ['02', 'Risk limits across accounts', 'Build a framework that keeps combined exposure visible and controlled.'],
@@ -36,8 +39,27 @@ function Logo() {
 
 function LeadForm() {
   const [sent, setSent] = useState(false)
-  function submit(event: FormEvent<HTMLFormElement>) {
+  const [sending, setSending] = useState(false)
+  async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    if (sending) return
+    setSending(true)
+    const form = new FormData(event.currentTarget)
+    const params = new URLSearchParams(window.location.search)
+    const body = new URLSearchParams({
+      firstName: String(form.get('firstName') || ''),
+      email: String(form.get('email') || ''),
+      phone: String(form.get('phone') || ''),
+      page: window.location.href,
+      utm_source: params.get('utm_source') || '',
+      utm_medium: params.get('utm_medium') || '',
+      utm_campaign: params.get('utm_campaign') || '',
+    })
+    try {
+      await fetch(leadSheetUrl, { method: 'POST', mode: 'no-cors', body })
+    } catch (error) {
+      console.error('Lead capture failed', error)
+    }
     setSent(true)
   }
   if (sent) return <div className={styles.success}><Check /> <strong>Check your inbox — your blueprint is on the way.</strong></div>
@@ -45,7 +67,7 @@ function LeadForm() {
     <label>FIRST NAME<input name="firstName" required placeholder="Your first name" autoComplete="given-name" /></label>
     <label>EMAIL ADDRESS<input name="email" required type="email" placeholder="you@example.com" autoComplete="email" /></label>
     <label>PHONE NUMBER<input name="phone" required type="tel" placeholder="+1 (555) 000-0000" autoComplete="tel" /></label>
-    <button type="submit">GET THE FREE BLUEPRINT <ArrowRight /></button>
+    <button type="submit" disabled={sending}>{sending ? 'SENDING…' : <>GET THE FREE BLUEPRINT <ArrowRight /></>}</button>
     <small>Free instant access. Educational purposes only.</small>
   </form>
 }
