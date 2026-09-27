@@ -64,8 +64,9 @@ export default function LeadMagnetPage() {
       <div className={styles.guideWrap}>
         <div className={styles.orbit} />
         <article className={styles.guide}>
+          <Image src="/blueprint-cover.jpg" alt="" fill sizes="(max-width: 520px) 78vw, 420px" className={styles.guideImg} priority />
           <div><span>FPT / 001</span><span>FIELD GUIDE</span></div>
-          <strong>3—</strong>
+          <strong>$1M</strong>
           <p>THE $1 MILLION FUNDING BLUEPRINT</p>
           <h2>Funding<br /><i>roadmap.</i></h2>
           <small>A disciplined roadmap for funded-account growth</small>
