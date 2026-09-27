@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from 'react'
 import Image from 'next/image'
-import { ArrowDown, ArrowRight, Check, ShieldCheck } from 'lucide-react'
+import { ArrowDown, ArrowRight, Check, Download, ShieldCheck } from 'lucide-react'
 import styles from './styles.module.css'
 
 const logoUrl = 'https://learn.fundedproptraders.com/content/orgs/org_ee416042-6f77-4d96-a45c-84fb012dfea4/logos/259957e1-1e6b-48e3-8add-b4f8c376a87e_logo.jpg'
@@ -59,7 +59,10 @@ function LeadForm() {
     }
     setSent(true)
   }
-  if (sent) return <div className={styles.success}><Check /> <strong>Check your inbox — your blueprint is on the way.</strong></div>
+  if (sent) return <div className={styles.success}>
+    <p className={styles.successTitle}><Check /> <strong>You're in — your blueprint is ready.</strong></p>
+    <a className={styles.downloadBtn} href="/1M-Funded-Blueprint-WChampFX.pdf" download="The $1M Funded Blueprint - WChampFX.pdf" target="_blank" rel="noopener">DOWNLOAD THE BLUEPRINT (PDF) <Download /></a>
+  </div>
   return <form className={styles.form} onSubmit={submit}>
     <label>FIRST NAME<input name="firstName" required placeholder="Your first name" autoComplete="given-name" /></label>
     <label>EMAIL ADDRESS<input name="email" required type="email" placeholder="you@example.com" autoComplete="email" /></label>
