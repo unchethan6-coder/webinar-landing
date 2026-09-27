@@ -7,9 +7,6 @@ import styles from './styles.module.css'
 
 const logoUrl = 'https://learn.fundedproptraders.com/content/orgs/org_ee416042-6f77-4d96-a45c-84fb012dfea4/logos/259957e1-1e6b-48e3-8add-b4f8c376a87e_logo.jpg'
 
-// Google Sheet lead capture (Apps Script web app)
-const leadSheetUrl = 'https://script.google.com/macros/s/AKfycbwavwpb40XozO72UEjTNgK5efULd_23k9--c8ks6ev05nh9Cm_zlLXydMZmdZ08D3L_/exec'
-
 const lessons = [
   ['01', 'Challenge selection and preparation', 'Choose a starting point and prepare around the rules that matter.'],
   ['02', 'Risk limits across accounts', 'Build a framework that keeps combined exposure visible and controlled.'],
@@ -56,7 +53,7 @@ function LeadForm() {
       utm_campaign: params.get('utm_campaign') || '',
     })
     try {
-      await fetch(leadSheetUrl, { method: 'POST', mode: 'no-cors', body })
+      await fetch('/api/lead', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body })
     } catch (error) {
       console.error('Lead capture failed', error)
     }
