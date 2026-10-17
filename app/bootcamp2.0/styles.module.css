@@ -22,3 +22,30 @@
 .consent{position:fixed;left:16px;right:16px;bottom:16px;z-index:40;max-width:720px;margin:0 auto;display:flex;align-items:center;gap:20px;padding:18px 20px;background:#10141d;color:#e4e7eb;border-radius:16px;box-shadow:0 20px 60px #0006}.consent p{margin:0;font-size:13px;line-height:1.55;color:#c2c8d0}.consent p strong{display:block;color:#fff;font-size:14px;margin-bottom:2px}.consent>div{display:flex;gap:8px;flex:none}.consent button{border-radius:999px;padding:11px 16px;font-size:13px;font-weight:700;white-space:nowrap}.consentReject{background:transparent;border:1px solid #4a525d;color:#fff}.consentAccept{background:var(--gold);border:1px solid var(--gold);color:#1c1710}
 @media(max-width:700px){.socialRow{grid-template-columns:repeat(3,1fr)}.consent{flex-direction:column;align-items:stretch;left:10px;right:10px;bottom:10px}.consent>div>button{flex:1}}
 @media(max-width:480px){.social .trustStrip{flex-direction:row;flex-wrap:wrap;justify-content:center;align-items:center}}
+/* Hero VSL: muted autoplay + unmute prompt */
+.vsl{position:relative;width:100%;max-width:900px;aspect-ratio:16/9;margin:4px 0 6px;border-radius:14px;overflow:hidden;background:#090b0d;box-shadow:0 24px 70px #12151d2b;scroll-margin-top:90px}.vsl iframe{position:absolute;inset:0;width:100%;height:100%;border:0}.unmute{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border:0;background:linear-gradient(180deg,#0000 40%,#0009);color:#fff;cursor:pointer}.unmute svg{width:58px;height:58px;padding:15px;border-radius:50%;background:var(--gold);color:#1c1710;box-shadow:0 10px 30px #0007;animation:pulse 1.8s ease-in-out infinite}.unmute span{font-size:14px;font-weight:800;padding:8px 14px;border-radius:999px;background:#10141dcc}@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.hero .lede{margin:18px 0 6px}.hero .ctaBlock{margin-top:22px}
+/* Mobile */
+@media(max-width:600px){
+.page :global(.section-pad){padding:56px 18px}
+.hero{padding-top:26px!important;padding-bottom:40px!important}.hero :global(.eyebrow){font-size:9px;letter-spacing:.12em;margin-bottom:14px}.hero h1{font-size:clamp(32px,9.6vw,40px);margin-bottom:18px}.vsl{width:calc(100% + 36px);margin:0 -18px;border-radius:0}.lede{font-size:15px}.micro{margin-bottom:22px}
+.page :global(.section-intro){margin-bottom:30px}.page :global(.section-intro h2),.page :global(.audience-copy h2),.coach h2{font-size:34px}.page :global(.section-intro p){font-size:14px}
+.page :global(.learn-card){min-height:0;padding:22px 20px}.page :global(.learn-card h3){margin:16px 0 8px;font-size:18px}.page :global(.learn-card p){font-size:14px;margin:0}.page :global(.learn-card>svg){display:none}
+.details{margin-top:18px}.details div{padding:16px}.details dd{font-size:14px}
+.steps article{padding:22px 20px}.steps h3{margin-top:16px}
+.page :global(.typeform-card){height:640px;border-radius:12px}
+.page :global(.proof-story figcaption){padding:16px}.page :global(.proof-media img){max-height:420px}
+.coachPhoto{aspect-ratio:4/3;max-width:none}.coachPhoto img{object-position:57% 25%}.coach p:not(:global(.eyebrow)){font-size:15px}
+.page :global(.audience-section){gap:24px}.page :global(.not-for){margin-top:24px}.page :global(.audience-list>div){padding:16px 0}.page :global(.audience-list p){font-size:14px}
+.page :global(.faq-item button){padding:18px 0;font-size:15px;gap:12px}.page :global(.faq-item>p){font-size:14px}
+.page :global(.final-cta h2){font-size:36px}
+.page :global(.footer){padding:44px 18px 96px}
+.social{margin-top:26px;padding:18px 12px 14px}.socialRow a{padding:10px 4px}
+.ctaBlock{margin-top:28px}
+}
+.swipeHint{display:none}
+@media(max-width:600px){
+.page :global(.proof-gallery){display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -18px;padding:0 18px 8px;scrollbar-width:none}.page :global(.proof-gallery)::-webkit-scrollbar{display:none}
+.page :global(.proof-story){flex:0 0 84%;scroll-snap-align:center}.page :global(.proof-story .proof-media){aspect-ratio:4/5!important;max-height:none}.page :global(.proof-media img){height:100%;max-height:none}.page :global(.proof-story blockquote){font-size:15px;margin:10px 0 12px}
+.page :global(.proof-section .split-intro){margin-bottom:22px}.swipeHint{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--gold)}.swipeHint svg{width:14px}
+}
