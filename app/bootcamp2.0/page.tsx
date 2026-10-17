@@ -4,6 +4,7 @@ import Script from 'next/script'
 import { useEffect, useState } from 'react'
 import { ArrowRight, Check, ChevronDown, Menu, Play, ShieldCheck, X } from 'lucide-react'
 import styles from './styles.module.css'
+import { socials } from './socials'
 
 const officialLogoUrl = 'https://learn.fundedproptraders.com/content/orgs/org_ee416042-6f77-4d96-a45c-84fb012dfea4/logos/259957e1-1e6b-48e3-8add-b4f8c376a87e_logo.jpg'
 
@@ -25,7 +26,42 @@ const bootcamp = {
   refund: '[ADD: refund policy]',
 }
 
-const trust = ['~536K followers across 6 platforms', 'Coached by Dan', 'Forex & futures', 'Process over hype']
+const trust = ['Coached by Dan', 'Forex & futures', 'Process over hype']
+
+// EU/EEA + UK + Switzerland: Meta Pixel waits for cookie consent
+const CONSENT_COUNTRIES = new Set(['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH'])
+const CONSENT_KEY = 'fpt-cookie-consent'
+
+function loadPixel() {
+  if (window.fbq || !META_PIXEL_ID) return
+  // Standard Meta Pixel bootstrap; only called once tracking is allowed
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const fbq: any = function (...args: unknown[]) { fbq.callMethod ? fbq.callMethod.apply(fbq, args) : fbq.queue.push(args) }
+  fbq.push = fbq
+  fbq.loaded = true
+  fbq.version = '2.0'
+  fbq.queue = []
+  window.fbq = fbq
+  ;(window as unknown as { _fbq: unknown })._fbq = fbq
+  const script = document.createElement('script')
+  script.async = true
+  script.src = 'https://connect.facebook.net/en_US/fbevents.js'
+  document.head.appendChild(script)
+  fbq('init', META_PIXEL_ID)
+  fbq('track', 'PageView')
+}
+
+function readConsent() {
+  try { return localStorage.getItem(CONSENT_KEY) } catch { return null }
+}
+
+function saveConsent(value: 'granted' | 'denied') {
+  try { localStorage.setItem(CONSENT_KEY, value) } catch {}
+}
+
+function SocialIcon({ path }: { path: string }) {
+  return <svg viewBox="0 0 24 24" aria-hidden="true"><path d={path} /></svg>
+}
 
 const problems = [
   ['Good week. One rule. Account gone.', 'The strategy was working. Then a daily loss limit or drawdown rule ended the evaluation.'],
@@ -89,6 +125,25 @@ export default function BootcampPage() {
   const [submitted, setSubmitted] = useState(false)
   const [playing, setPlaying] = useState(false)
   const [showSticky, setShowSticky] = useState(false)
+  const [showConsent, setShowConsent] = useState(false)
+
+  // Meta Pixel with consent: EU/UK visitors choose in the banner; elsewhere the pixel loads straight away
+  useEffect(() => {
+    const stored = readConsent()
+    if (stored === 'granted') { loadPixel(); return }
+    if (stored === 'denied') return
+    fetch('/api/geo').then((res) => res.json()).then(({ country }: { country: string }) => {
+      if (country && !CONSENT_COUNTRIES.has(country)) loadPixel()
+      else setShowConsent(true)
+    }).catch(() => setShowConsent(true))
+  }, [])
+
+  const chooseConsent = (value: 'granted' | 'denied') => {
+    saveConsent(value)
+    if (window.fbq) window.fbq('consent', value === 'granted' ? 'grant' : 'revoke')
+    else if (value === 'granted') loadPixel()
+    setShowConsent(false)
+  }
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -123,8 +178,6 @@ export default function BootcampPage() {
 
   return (
     <main className="site-shell" id="top">
-      {META_PIXEL_ID && <Script id="meta-pixel" strategy="afterInteractive">{`if(!window.fbq){!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${META_PIXEL_ID}');fbq('track','PageView');}`}</Script>}
-
       <header className="site-header">
         <a className="brand" href="#top" aria-label="Funded Prop Traders home"><img src={officialLogoUrl} alt="Funded Prop Traders" onError={(event) => { event.currentTarget.hidden = true }} /><span>FPT</span><small>FUNDED PROP TRADERS</small></a>
         <nav className={menuOpen ? 'nav-links is-open' : 'nav-links'} aria-label="Main navigation">
@@ -140,7 +193,11 @@ export default function BootcampPage() {
         <p className={styles.lede}>Watch the free training to see the rules-first process Dan teaches inside the Bootcamp. Then book a free strategy call to map your next step.</p>
         <Cta label="Watch the Free Training" note="Free · Watch now · No card needed" onClick={() => { setPlaying(true); scrollTo('training') }} />
         <p className={styles.micro}>Educational content, not financial advice.</p>
-        <ul className={styles.trustStrip}>{trust.map((item) => <li key={item}><Check aria-hidden="true" />{item}</li>)}</ul>
+        <div className={styles.social}>
+          <p className={styles.socialHead}><strong>~536K</strong> traders follow Dan across 6 platforms</p>
+          <div className={styles.socialRow}>{socials.map((item) => <a key={item.name} href={item.url} target="_blank" rel="noopener noreferrer" aria-label={`Dan on ${item.name}`} style={{ '--brand': item.color } as React.CSSProperties}><SocialIcon path={item.path} /><span>{item.name}</span></a>)}</div>
+          <ul className={styles.trustStrip}>{trust.map((item) => <li key={item}><Check aria-hidden="true" />{item}</li>)}</ul>
+        </div>
       </section>
 
       <section id="training" className="video-section section-pad"><div className="section-intro"><p className="eyebrow">01 / FREE TRAINING</p><h2>Watch the <em>Free Training</em></h2><p>How traders lose evaluations on rules — and the process for rules, risk and review that the Bootcamp is built on.</p></div><div className="video-wrap">{!playing ? <button className={styles.videoCover} onClick={() => setPlaying(true)} aria-label="Play the free training"><img src="/fpt-vsl-poster.webp" alt="" /><span><Play aria-hidden="true" /></span></button> : <iframe src={`https://www.youtube-nocookie.com/embed/${VSL_YOUTUBE_ID}?autoplay=1&rel=0&modestbranding=1&playsinline=1`} title="Funded Prop Traders Bootcamp free training" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />}</div><Cta label="Book My Free Strategy Call" note={CALL_NOTE} onClick={() => scrollTo('apply')} /></section>
@@ -181,9 +238,11 @@ export default function BootcampPage() {
 
       <section className="final-cta section-pad"><p className="eyebrow gold">START WITH THE FREE TRAINING</p><h2>Fix the rules.<br /><em>Then trade the plan.</em></h2><p>Watch the free training, then book a free strategy call to see if the Bootcamp fits where you are now.</p><Cta label="Book My Free Strategy Call" note={CALL_NOTE} onClick={() => scrollTo('apply')} light /><p className={styles.finalMicro}><ShieldCheck aria-hidden="true" /> Educational content. No promises of results.</p></section>
 
-      <div className={showSticky && !submitted ? `${styles.sticky} ${styles.stickyOn}` : styles.sticky} aria-hidden={!showSticky || submitted}><button onClick={() => scrollTo('apply')} tabIndex={showSticky && !submitted ? 0 : -1}><span>Book My Free Strategy Call</span><small>{CALL_NOTE}</small></button></div>
+      {showConsent && <div className={styles.consent} role="dialog" aria-label="Cookie preferences"><p><strong>Cookies</strong> We use essential cookies to run this site. With your consent, we also use Meta Pixel cookies to measure our ads. You can change your choice at any time via &ldquo;Cookie settings&rdquo; in the footer.</p><div><button className={styles.consentReject} onClick={() => chooseConsent('denied')}>Reject non-essential</button><button className={styles.consentAccept} onClick={() => chooseConsent('granted')}>Accept all</button></div></div>}
 
-      <footer className="footer"><div className="footer-top"><a className="brand" href="#top"><img src={officialLogoUrl} alt="Funded Prop Traders" onError={(event) => { event.currentTarget.hidden = true }} /><span>FPT</span><small>FUNDED PROP TRADERS</small></a><p>Education for traders who value process, discipline and long-term progress.</p><div className="footer-links"><a href="#training">Training</a><a href="#modules">Bootcamp</a><a href="#faq">FAQ</a><a href="#apply">Book a call</a></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Funded Prop Traders</span><div><a href="#top">Privacy Policy</a><a href="#top">Terms of Service</a><a href="#top">Risk Disclosure</a><a href="#top">Earnings Disclaimer</a><a href="#top">Refund Policy</a></div></div><p className="legal">Risk disclosure: trading forex, futures and other leveraged products involves substantial risk of loss and is not suitable for everyone. All content is educational and is not financial advice. Earnings disclaimer: we make no guarantee of income, profits, funding or results. Any figures shown are individual examples; individual results vary and are not typical. Past or simulated performance does not indicate future results. Any $1M figure is a long-term roadmap target, not a promise. Funded Prop Traders is not affiliated with or endorsed by Meta Platforms, Inc.</p></footer>
+      <div className={showSticky && !submitted && !showConsent ? `${styles.sticky} ${styles.stickyOn}` : styles.sticky} aria-hidden={!showSticky || submitted || showConsent}><button onClick={() => scrollTo('apply')} tabIndex={showSticky && !submitted && !showConsent ? 0 : -1}><span>Book My Free Strategy Call</span><small>{CALL_NOTE}</small></button></div>
+
+      <footer className="footer"><div className="footer-top"><a className="brand" href="#top"><img src={officialLogoUrl} alt="Funded Prop Traders" onError={(event) => { event.currentTarget.hidden = true }} /><span>FPT</span><small>FUNDED PROP TRADERS</small></a><div><p>Education for traders who value process, discipline and long-term progress.</p><div className={styles.footerSocial}>{socials.map((item) => <a key={item.name} href={item.url} target="_blank" rel="noopener noreferrer" aria-label={`Dan on ${item.name}`}><SocialIcon path={item.path} /></a>)}</div></div><div className="footer-links"><a href="#training">Training</a><a href="#modules">Bootcamp</a><a href="#faq">FAQ</a><a href="#apply">Book a call</a></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Funded Prop Traders</span><div><a href="#top">Privacy Policy</a><a href="#top">Terms of Service</a><a href="#top">Risk Disclosure</a><a href="#top">Earnings Disclaimer</a><a href="#top">Refund Policy</a><button className={styles.cookieLink} onClick={() => setShowConsent(true)}>Cookie settings</button></div></div><p className="legal">Risk disclosure: trading forex, futures and other leveraged products involves substantial risk of loss and is not suitable for everyone. All content is educational and is not financial advice. Earnings disclaimer: we make no guarantee of income, profits, funding or results. Any figures shown are individual examples; individual results vary and are not typical. Past or simulated performance does not indicate future results. Any $1M figure is a long-term roadmap target, not a promise. Funded Prop Traders is not affiliated with or endorsed by Meta Platforms, Inc.</p></footer>
     </main>
   )
 }
