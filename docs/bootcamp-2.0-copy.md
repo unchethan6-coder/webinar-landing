@@ -43,5 +43,5 @@ Secondary (after the form): **Book My Free Strategy Call** — "30 minutes. Free
 
 - Typeform `fTCjjlnG` (https://bit.ly/fptbootcampa) is embedded inline and passes UTMs + fbclid through.
 - On a completed Typeform submission the page fires
-  `fbq('trackCustom', 'LeadBootcamp', { content_name: 'Bootcamp 2.0 Typeform', form_id: 'fTCjjlnG' }, { eventID: responseId })`.
-- The pixel base code loads from the `NEXT_PUBLIC_META_PIXEL_ID` env var (skipped if a pixel is already on the page).
+  `fbq('track', 'Lead', { content_name: 'Strategy Call Typeform' }, { eventID: responseId })` — the same Lead event as the home page.
+- Pixel 1063820109592095 loads after cookie consent for EU/UK visitors, and straight away elsewhere.

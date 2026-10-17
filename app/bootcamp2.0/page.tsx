@@ -12,7 +12,7 @@ const officialLogoUrl = 'https://learn.fundedproptraders.com/content/orgs/org_ee
 const VSL_YOUTUBE_ID = 'Ppm9XYEBDIw'
 // Typeform behind https://bit.ly/fptbootcampa
 const TYPEFORM_ID = 'fTCjjlnG'
-// Meta Pixel shared with the other landing pages; this page fires the custom LeadBootcamp event
+// Meta Pixel shared with the other landing pages; fires the same standard Lead event as the home page
 const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '1063820109592095'
 // Calendar link for the thank-you step. Leave empty to hide the button.
 const BOOKING_URL = ''
@@ -178,7 +178,9 @@ export default function BootcampPage() {
   // The Typeform embed resolves its submit callback by name, so define it before loading the embed script
   useEffect(() => {
     window.fptBootcampSubmit = (event) => {
-      window.fbq?.('trackCustom', 'LeadBootcamp', { content_name: 'Bootcamp 2.0 Typeform', form_id: TYPEFORM_ID }, { eventID: event?.responseId })
+      window.fbq?.('track', 'Lead', {
+        content_name: 'Strategy Call Typeform'
+      }, { eventID: event?.responseId })
       setSubmitted(true)
       setTimeout(() => document.getElementById('thank-you')?.scrollIntoView({ behavior: 'smooth' }), 50)
     }
