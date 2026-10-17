@@ -2,11 +2,13 @@
 
 import Script from 'next/script'
 import { useEffect, useState } from 'react'
-import { ArrowRight, Check, ChevronDown, Menu, ShieldCheck, X } from 'lucide-react'
+import { ArrowRight, Check, ChevronDown, Menu, Play, ShieldCheck, X } from 'lucide-react'
 import styles from './styles.module.css'
 
 const officialLogoUrl = 'https://learn.fundedproptraders.com/content/orgs/org_ee416042-6f77-4d96-a45c-84fb012dfea4/logos/259957e1-1e6b-48e3-8add-b4f8c376a87e_logo.jpg'
 
+// VSL: https://youtu.be/Ppm9XYEBDIw
+const VSL_YOUTUBE_ID = 'Ppm9XYEBDIw'
 // Typeform behind https://bit.ly/fptbootcampa
 const TYPEFORM_ID = 'fTCjjlnG'
 // Meta Pixel: set NEXT_PUBLIC_META_PIXEL_ID in Vercel to the same pixel used by the ads
@@ -79,6 +81,7 @@ export default function BootcampPage() {
   const [faqOpen, setFaqOpen] = useState<number | null>(0)
   const [formReady, setFormReady] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [playing, setPlaying] = useState(false)
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -118,7 +121,7 @@ export default function BootcampPage() {
         <ul className={styles.trustStrip}>{trust.map((item) => <li key={item}><Check aria-hidden="true" />{item}</li>)}</ul>
       </section>
 
-      <section id="training" className="video-section section-pad"><div className="section-intro"><p className="eyebrow">01 / FREE TRAINING</p><h2>Watch the <em>Free Training</em></h2><p>How traders lose evaluations on rules — and the process for rules, risk and review that the Bootcamp is built on.</p></div><div className="video-wrap"><video autoPlay muted playsInline controls preload="metadata" poster="/fpt-vsl-poster.webp" aria-label="Funded Prop Traders Bootcamp free training"><source src="/fpt-vsl.mp4" type="video/mp4" />Your browser does not support HTML video.</video></div><button className="text-cta" onClick={() => scrollTo('apply')}>Book My Free Strategy Call <ArrowRight /></button></section>
+      <section id="training" className="video-section section-pad"><div className="section-intro"><p className="eyebrow">01 / FREE TRAINING</p><h2>Watch the <em>Free Training</em></h2><p>How traders lose evaluations on rules — and the process for rules, risk and review that the Bootcamp is built on.</p></div><div className="video-wrap">{!playing ? <button className={styles.videoCover} onClick={() => setPlaying(true)} aria-label="Play the free training"><img src="/fpt-vsl-poster.webp" alt="" /><span><Play aria-hidden="true" /></span></button> : <iframe src={`https://www.youtube-nocookie.com/embed/${VSL_YOUTUBE_ID}?autoplay=1&rel=0&modestbranding=1&playsinline=1`} title="Funded Prop Traders Bootcamp free training" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />}</div><button className="text-cta" onClick={() => scrollTo('apply')}>Book My Free Strategy Call <ArrowRight /></button></section>
 
       <section id="apply" className="booking-section section-pad">
         <div className="section-intro"><p className="eyebrow">02 / FREE STRATEGY CALL</p><h2>Book Your Free <em>Strategy Call</em></h2><p>Answer a few short questions. It takes about two minutes and helps us prepare for your call.</p></div>
