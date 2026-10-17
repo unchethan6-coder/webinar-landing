@@ -11,8 +11,8 @@ const officialLogoUrl = 'https://learn.fundedproptraders.com/content/orgs/org_ee
 const VSL_YOUTUBE_ID = 'Ppm9XYEBDIw'
 // Typeform behind https://bit.ly/fptbootcampa
 const TYPEFORM_ID = 'fTCjjlnG'
-// Meta Pixel: set NEXT_PUBLIC_META_PIXEL_ID in Vercel to the same pixel used by the ads
-const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || ''
+// Meta Pixel shared with the other landing pages; this page fires the custom LeadBootcamp event
+const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '1063820109592095'
 // Calendar link for the thank-you step. Leave empty to hide the button.
 const BOOKING_URL = ''
 
@@ -76,12 +76,19 @@ declare global {
   }
 }
 
+const CALL_NOTE = 'Free · 30 minutes · No card needed'
+
+function Cta({ label, note, onClick, light }: { label: string; note?: string; onClick: () => void; light?: boolean }) {
+  return <div className={styles.ctaBlock}><button className={styles.cta} onClick={onClick}><span>{label}</span><i><ArrowRight aria-hidden="true" /></i></button>{note && <p className={light ? `${styles.ctaNote} ${styles.ctaNoteLight}` : styles.ctaNote}>{note}</p>}</div>
+}
+
 export default function BootcampPage() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [faqOpen, setFaqOpen] = useState<number | null>(0)
   const [formReady, setFormReady] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [playing, setPlaying] = useState(false)
+  const [showSticky, setShowSticky] = useState(false)
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -99,6 +106,21 @@ export default function BootcampPage() {
     return () => { delete window.fptBootcampSubmit }
   }, [])
 
+  // Mobile sticky CTA: visible once the hero is scrolled past, hidden while the form is on screen
+  useEffect(() => {
+    const hero = document.getElementById('hero')
+    const apply = document.getElementById('apply')
+    if (!hero || !apply) return
+    const seen = { hero: true, apply: false }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => { seen[entry.target.id as 'hero' | 'apply'] = entry.isIntersecting })
+      setShowSticky(!seen.hero && !seen.apply)
+    }, { threshold: 0.05 })
+    observer.observe(hero)
+    observer.observe(apply)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <main className="site-shell" id="top">
       {META_PIXEL_ID && <Script id="meta-pixel" strategy="afterInteractive">{`if(!window.fbq){!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${META_PIXEL_ID}');fbq('track','PageView');}`}</Script>}
@@ -112,16 +134,16 @@ export default function BootcampPage() {
         <button className="menu-toggle" aria-label={menuOpen ? 'Close menu' : 'Open menu'} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
       </header>
 
-      <section className={`${styles.hero} section-pad`}>
+      <section id="hero" className={`${styles.hero} section-pad`}>
         <p className="eyebrow"><span />FREE TRAINING<i>/</i>FUNDED PROP TRADERS BOOTCAMP</p>
         <h1>Most evaluations are lost on rules, <em>not strategy.</em></h1>
         <p className={styles.lede}>Watch the free training to see the rules-first process Dan teaches inside the Bootcamp. Then book a free strategy call to map your next step.</p>
-        <button className="button button-dark" onClick={() => scrollTo('training')}>Watch the Free Training <ArrowRight /></button>
-        <p className={styles.micro}>Free. No card needed. Educational content, not financial advice.</p>
+        <Cta label="Watch the Free Training" note="Free · Watch now · No card needed" onClick={() => { setPlaying(true); scrollTo('training') }} />
+        <p className={styles.micro}>Educational content, not financial advice.</p>
         <ul className={styles.trustStrip}>{trust.map((item) => <li key={item}><Check aria-hidden="true" />{item}</li>)}</ul>
       </section>
 
-      <section id="training" className="video-section section-pad"><div className="section-intro"><p className="eyebrow">01 / FREE TRAINING</p><h2>Watch the <em>Free Training</em></h2><p>How traders lose evaluations on rules — and the process for rules, risk and review that the Bootcamp is built on.</p></div><div className="video-wrap">{!playing ? <button className={styles.videoCover} onClick={() => setPlaying(true)} aria-label="Play the free training"><img src="/fpt-vsl-poster.webp" alt="" /><span><Play aria-hidden="true" /></span></button> : <iframe src={`https://www.youtube-nocookie.com/embed/${VSL_YOUTUBE_ID}?autoplay=1&rel=0&modestbranding=1&playsinline=1`} title="Funded Prop Traders Bootcamp free training" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />}</div><button className="text-cta" onClick={() => scrollTo('apply')}>Book My Free Strategy Call <ArrowRight /></button></section>
+      <section id="training" className="video-section section-pad"><div className="section-intro"><p className="eyebrow">01 / FREE TRAINING</p><h2>Watch the <em>Free Training</em></h2><p>How traders lose evaluations on rules — and the process for rules, risk and review that the Bootcamp is built on.</p></div><div className="video-wrap">{!playing ? <button className={styles.videoCover} onClick={() => setPlaying(true)} aria-label="Play the free training"><img src="/fpt-vsl-poster.webp" alt="" /><span><Play aria-hidden="true" /></span></button> : <iframe src={`https://www.youtube-nocookie.com/embed/${VSL_YOUTUBE_ID}?autoplay=1&rel=0&modestbranding=1&playsinline=1`} title="Funded Prop Traders Bootcamp free training" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />}</div><Cta label="Book My Free Strategy Call" note={CALL_NOTE} onClick={() => scrollTo('apply')} /></section>
 
       <section id="apply" className="booking-section section-pad">
         <div className="section-intro"><p className="eyebrow">02 / FREE STRATEGY CALL</p><h2>Book Your Free <em>Strategy Call</em></h2><p>Answer a few short questions. It takes about two minutes and helps us prepare for your call.</p></div>
@@ -140,15 +162,16 @@ export default function BootcampPage() {
         {formReady && <Script id="typeform-embed" src="https://embed.typeform.com/next/embed.js" strategy="afterInteractive" />}
       </section>
 
-      <section className="soft-section section-pad"><div className="section-intro"><p className="eyebrow">03 / SOUND FAMILIAR?</p><h2>The strategy isn&apos;t <em>always the problem.</em></h2></div><div className={styles.problemGrid}>{problems.map(([title, copy], i) => <article className="learn-card" key={title}><span className="card-number">0{i + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div></section>
+      <section className="soft-section section-pad"><div className="section-intro"><p className="eyebrow">03 / SOUND FAMILIAR?</p><h2>The strategy isn&apos;t <em>always the problem.</em></h2></div><div className={styles.problemGrid}>{problems.map(([title, copy], i) => <article className="learn-card" key={title}><span className="card-number">0{i + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div><Cta label="Book My Free Strategy Call" note={CALL_NOTE} onClick={() => scrollTo('apply')} /></section>
 
       <section id="modules" className="section-pad"><div className="section-intro split-intro"><div><p className="eyebrow">04 / INSIDE THE BOOTCAMP</p><h2>What You&apos;ll <em>Learn</em></h2></div><p>Six parts. One goal: a process you can repeat under prop firm rules.</p></div><div className={styles.moduleGrid}>{modules.map(([num, title, copy]) => <article className="learn-card" key={num}><span className="card-number">{num}</span><h3>{title}</h3><p>{copy}</p><ArrowRight /></article>)}</div>
         <dl className={styles.details}><div><dt>Investment</dt><dd>{bootcamp.price}</dd></div><div><dt>Next intake</dt><dd>{bootcamp.start}</dd></div><div><dt>Duration</dt><dd>{bootcamp.duration}</dd></div><div><dt>Seats</dt><dd>{bootcamp.seats}</dd></div></dl>
+        <Cta label="See If the Bootcamp Fits" note={CALL_NOTE} onClick={() => scrollTo('apply')} />
       </section>
 
-      <section className="roadmap-section section-pad"><div className="section-intro"><p className="eyebrow">05 / HOW IT WORKS</p><h2>Three simple <em>steps.</em></h2></div><div className={styles.steps}>{steps.map(([title, copy], i) => <article key={title}><span>0{i + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div><div className={styles.center}><button className="button button-dark" onClick={() => scrollTo('training')}>Watch the Free Training <ArrowRight /></button></div></section>
+      <section className="roadmap-section section-pad"><div className="section-intro"><p className="eyebrow">05 / HOW IT WORKS</p><h2>Three simple <em>steps.</em></h2></div><div className={styles.steps}>{steps.map(([title, copy], i) => <article key={title}><span>0{i + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div><Cta label="Book My Free Strategy Call" note={CALL_NOTE} onClick={() => scrollTo('apply')} /></section>
 
-      <section className="proof-section section-pad"><div className="section-intro split-intro"><div><p className="eyebrow">06 / COMMUNITY</p><h2>Real traders.<br /><em>Real process.</em></h2></div><div><p>Milestones and feedback shared by members of the community as they build skill and work through evaluations.</p><span className="proof-count">06 selected stories</span></div></div><div className="proof-gallery">{testimonials.map((item) => <figure className={`proof-story ${item.className}`} key={item.image}><div className="proof-media"><img src={item.image} width={item.width} height={item.height} alt={item.alt} loading="lazy" decoding="async" /></div><figcaption><span>{item.result}</span><blockquote>{item.quote}</blockquote><strong>{item.name}</strong></figcaption></figure>)}</div><p className="disclosure">Individual results vary and are not typical.</p></section>
+      <section className="proof-section section-pad"><div className="section-intro split-intro"><div><p className="eyebrow">06 / COMMUNITY</p><h2>Real traders.<br /><em>Real process.</em></h2></div><div><p>Milestones and feedback shared by members of the community as they build skill and work through evaluations.</p><span className="proof-count">06 selected stories</span></div></div><div className="proof-gallery">{testimonials.map((item) => <figure className={`proof-story ${item.className}`} key={item.image}><div className="proof-media"><img src={item.image} width={item.width} height={item.height} alt={item.alt} loading="lazy" decoding="async" /></div><figcaption><span>{item.result}</span><blockquote>{item.quote}</blockquote><strong>{item.name}</strong></figcaption></figure>)}</div><p className="disclosure">Individual results vary and are not typical.</p><Cta label="Book My Free Strategy Call" note={CALL_NOTE} onClick={() => scrollTo('apply')} /></section>
 
       <section className={`${styles.coach} section-pad`}><div className={styles.coachPhoto}><img src="/dan-cheung-profile.jpg" alt="Dan Cheung, coach of the Funded Prop Traders Bootcamp" loading="lazy" /></div><div><p className="eyebrow">07 / YOUR COACH</p><h2>Meet <em>Dan.</em></h2><p>Dan Cheung is a prop firm trading educator. He shares the real side of evaluations — the passes, the breaches and the review that follows — with a community of around 536K followers.</p><p>His approach is simple: rules first, risk second, setups third. The Bootcamp is that process, taught step by step, with review and accountability built in.</p></div></section>
 
@@ -156,7 +179,9 @@ export default function BootcampPage() {
 
       <section id="faq" className="faq-section section-pad"><div className="section-intro"><p className="eyebrow">09 / FAQ</p><h2>Questions, answered.</h2></div><div className="faq-list">{faqs.map(([q, a], i) => <div className="faq-item" key={q}><button aria-expanded={faqOpen === i} onClick={() => setFaqOpen(faqOpen === i ? null : i)}><span>{q}</span><ChevronDown className={faqOpen === i ? 'rotate' : ''} /></button>{faqOpen === i && <p>{a}</p>}</div>)}</div></section>
 
-      <section className="final-cta section-pad"><p className="eyebrow gold">START WITH THE FREE TRAINING</p><h2>Fix the rules.<br /><em>Then trade the plan.</em></h2><p>Watch the free training, then book a free strategy call to see if the Bootcamp fits where you are now.</p><button className="button button-gold" onClick={() => scrollTo('training')}>Watch the Free Training <ArrowRight /></button><p className={styles.finalMicro}><ShieldCheck aria-hidden="true" /> Free. No card needed. No promises of results.</p></section>
+      <section className="final-cta section-pad"><p className="eyebrow gold">START WITH THE FREE TRAINING</p><h2>Fix the rules.<br /><em>Then trade the plan.</em></h2><p>Watch the free training, then book a free strategy call to see if the Bootcamp fits where you are now.</p><Cta label="Book My Free Strategy Call" note={CALL_NOTE} onClick={() => scrollTo('apply')} light /><p className={styles.finalMicro}><ShieldCheck aria-hidden="true" /> Educational content. No promises of results.</p></section>
+
+      <div className={showSticky && !submitted ? `${styles.sticky} ${styles.stickyOn}` : styles.sticky} aria-hidden={!showSticky || submitted}><button onClick={() => scrollTo('apply')} tabIndex={showSticky && !submitted ? 0 : -1}><span>Book My Free Strategy Call</span><small>{CALL_NOTE}</small></button></div>
 
       <footer className="footer"><div className="footer-top"><a className="brand" href="#top"><img src={officialLogoUrl} alt="Funded Prop Traders" onError={(event) => { event.currentTarget.hidden = true }} /><span>FPT</span><small>FUNDED PROP TRADERS</small></a><p>Education for traders who value process, discipline and long-term progress.</p><div className="footer-links"><a href="#training">Training</a><a href="#modules">Bootcamp</a><a href="#faq">FAQ</a><a href="#apply">Book a call</a></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Funded Prop Traders</span><div><a href="#top">Privacy Policy</a><a href="#top">Terms of Service</a><a href="#top">Risk Disclosure</a><a href="#top">Earnings Disclaimer</a><a href="#top">Refund Policy</a></div></div><p className="legal">Risk disclosure: trading forex, futures and other leveraged products involves substantial risk of loss and is not suitable for everyone. All content is educational and is not financial advice. Earnings disclaimer: we make no guarantee of income, profits, funding or results. Any figures shown are individual examples; individual results vary and are not typical. Past or simulated performance does not indicate future results. Any $1M figure is a long-term roadmap target, not a promise. Funded Prop Traders is not affiliated with or endorsed by Meta Platforms, Inc.</p></footer>
     </main>
